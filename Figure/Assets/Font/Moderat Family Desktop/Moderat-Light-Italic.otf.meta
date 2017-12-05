@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: b43685a3ca5fd43e7b87961580a8e402
+timeCreated: 1510707771
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Moderat
+  fontNames:
+  - Moderat
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 54824f31ce3a84d369247d7fb9ce0c61, type: 3}
+  - {fileID: 12800000, guid: 8c01e2528a001491d93343623e1f71f0, type: 3}
+  - {fileID: 12800000, guid: a9986924d79c749ec83568d4e2492aa1, type: 3}
+  - {fileID: 12800000, guid: ae8f650631ba345d9ad8911be65a1e6e, type: 3}
+  - {fileID: 12800000, guid: 06efb0763c1004abbaa53583cf2eb5ff, type: 3}
+  - {fileID: 12800000, guid: 4cbc828fa6dd04217a3d8ef56c66fb27, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
