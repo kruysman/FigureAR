@@ -7,6 +7,7 @@ using UnityEngine;
 public class TrajectoryClass{
 	public List<Point> points;
 	public Pose table_t_robot;
+	public bool object_attached;
 
 }
 
