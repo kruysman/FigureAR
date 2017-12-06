@@ -14,6 +14,9 @@ public class WebSocketTest : MonoBehaviour {
 	public float tpC3;
 	public float tpC4;
 
+	public int bin_destination;
+	private int bin;
+
 
 
 	IEnumerator Start () {
@@ -35,7 +38,7 @@ public class WebSocketTest : MonoBehaviour {
 			{
 				
 
-				Debug.Log ("Received: "+reply);
+				//Debug.Log ("Received: "+reply);
 				TileClass tiles = JsonUtility.FromJson<TileClass>(reply);
 				if (tiles.tiles.Count != 0) {
 					var assets = GameObject.FindGameObjectsWithTag("confidence_asset");
@@ -58,7 +61,6 @@ public class WebSocketTest : MonoBehaviour {
 					int c5_count = 0;
 
 
-					Debug.Log ("tiles json correct");
 					tpC1 = tiles.bins.c1;
 					tpC2 = tiles.bins.c2;
 					tpC3 = tiles.bins.c3;
@@ -103,12 +105,6 @@ public class WebSocketTest : MonoBehaviour {
 						goAnno.transform.SetParent (image_target1.transform);
 						annoList.Add (goAnno);
 
-						// find out which tile is going to be placed next
-						if (confidence_location.transform.localPosition.x < rightmost_xposition) {
-							rightmost_index = j;
-							rightmost_xposition = confidence_location.transform.localPosition.x;
-						}
-
 						ConfidenceAttributes goConfidence = goAnno.GetComponent<ConfidenceAttributes> ();
 						goConfidence.c1 = tiles.tiles [j].c1;
 						goConfidence.c2 = tiles.tiles [j].c2;
@@ -128,20 +124,36 @@ public class WebSocketTest : MonoBehaviour {
 						float percent_remap = Remap (confidenceList [4], highestPercentage, lowestPercentage, 0f, 1f);
 						goConfidence.range = percent_remap;
 
+
+
 						if (confidenceList [4] == tiles.tiles [j].c1) {
 							c1_count = c1_count + 1;
+							bin = 1;
 						} else if (confidenceList [4] == tiles.tiles [j].c2) {
 							c2_count = c2_count + 1;
+							bin = 2;
 						} else if (confidenceList [4] == tiles.tiles [j].c3) {
 							c3_count = c3_count + 1;
+							bin = 3;
 						} else if (confidenceList [4] == tiles.tiles [j].c4) {
 							c4_count = c4_count + 1;
+							bin = 4;
 						} else if (confidenceList [4] == tiles.tiles [j].c5) {
 							c5_count = c5_count + 1;
+							bin = 5;
+						}
+
+
+						// find out which tile is going to be placed next and which bin it is going to be placed in
+						if (confidence_location.transform.localPosition.x < rightmost_xposition) {
+							rightmost_index = j;
+							rightmost_xposition = confidence_location.transform.localPosition.x;
+							bin_destination = bin;
 						}
 					}
 
 					annoList [rightmost_index].tag = "confidence_asset_picked";
+
 
 					/// send counts to graph
 					GameObject graphGO = GameObject.Find ("graph");
@@ -151,8 +163,6 @@ public class WebSocketTest : MonoBehaviour {
 					scaleGraph.count_c3 = c3_count;
 					scaleGraph.count_c4 = c4_count;
 					scaleGraph.count_c5 = c5_count;
-				} else {
-					Debug.Log ("tiles json wrong");
 				}
 			}
 			if (w.error != null)

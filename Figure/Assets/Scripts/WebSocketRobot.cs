@@ -11,6 +11,7 @@ public class WebSocketRobot : MonoBehaviour {
 
 	public GameObject tool;
 	public GameObject robot;
+	public Vector3 tile_picked_position;
 
 	private Keyframe[] tX;
 	private Keyframe[] tY;
@@ -71,11 +72,10 @@ public class WebSocketRobot : MonoBehaviour {
 			if (reply != null)
 			{
 
-				Debug.Log ("Received: "+reply);
+				//Debug.Log ("Received: "+reply);
 				TrajectoryClass trajectory = JsonUtility.FromJson<TrajectoryClass>(reply);
 				if (trajectory.points.Count != 0) {
-					Debug.Log ("trajectory json correct");
-
+					
 					AnimationClip clip = new AnimationClip ();
 					anim = tool.gameObject.GetComponent<Animation> ();
 					tX = new Keyframe[trajectory.points.Count];
@@ -281,10 +281,11 @@ public class WebSocketRobot : MonoBehaviour {
 					anim_A6.Play ("robot6");
 
 					/// parent tile that is going to be picked with robot tool
-					Debug.Log("attached ? " + trajectory.object_attached);
-					if (trajectory.object_attached == true) {
-						GameObject tile_picked = GameObject.FindGameObjectWithTag ("confidence_asset_picked");
 
+					GameObject tile_picked = GameObject.FindGameObjectWithTag ("confidence_asset_picked");
+					Vector3 tile_picked_position = new Vector3 (tile_picked.transform.position.x, tile_picked.transform.position.y, tile_picked.transform.position.z); 
+
+					if (trajectory.object_attached == true) {
 						if (tile_picked != null) {
 							GameObject tile_picked_moving = GameObject.Instantiate (tile_picked);
 							if (tile_picked_moving != null) {
@@ -299,6 +300,7 @@ public class WebSocketRobot : MonoBehaviour {
 
 						Vector3 bury_picked = new Vector3 (tile_picked.transform.position.x, tile_picked.transform.position.y - 100f, tile_picked.transform.position.z);
 						tile_picked.transform.position = bury_picked;
+						tile_picked_position = bury_picked;
 					} else {
 						var assets_picked_clone = GameObject.FindGameObjectsWithTag("confidence_asset_picked_clone");
 						foreach(GameObject item_picked in assets_picked_clone)
@@ -306,8 +308,6 @@ public class WebSocketRobot : MonoBehaviour {
 							Destroy(item_picked);
 						}
 					}
-				} else {
-					Debug.Log ("trajectory json wrong");
 				}
 
 
