@@ -5,14 +5,14 @@ using UnityEngine.UI;
 using System;
 
 public class TimeSinceEvent : MonoBehaviour {
-	private Text time_text;
+	private TextMesh time_text;
 	private OpenMenu om;
 
 	private float timer;
 	private float last_intervention;
 	// Use this for initialization
 	void Start () {
-		time_text = this.gameObject.GetComponent<Text> ();
+		time_text = this.gameObject.GetComponent<TextMesh> ();
 		GameObject menu = GameObject.Find ("Menu");
 		om = menu.GetComponent<OpenMenu> ();
 

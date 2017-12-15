@@ -8,6 +8,7 @@ TagManager:
   - confidence_asset
   - confidence_asset_picked
   - confidence_asset_picked_clone
+  - 3dtext
   layers:
   - Default
   - TransparentFX

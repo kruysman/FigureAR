@@ -36,29 +36,6 @@ public class TilesPlaced : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		/*if (graphScript.placed_c1 < 10) {
-			navy_text.text = "0" + Mathf.Round (graphScript.placed_c1) + "  Navy Blue";
-		} else {
-			navy_text.text = Mathf.Round (graphScript.placed_c1) + "  Navy Blue";
-		}
-
-		if (graphScript.placed_c2 < 10) {
-			lightblue_text.text = "0" + Mathf.Round (graphScript.placed_c2) + "  Light Blue";
-		} else {
-			lightblue_text.text = Mathf.Round (graphScript.placed_c2) + "  Light Blue";
-		}
-
-		if (graphScript.placed_c3 < 10) {
-			red_text.text = "0" + Mathf.Round (graphScript.placed_c3) + "  Red";
-		} else {
-			red_text.text = Mathf.Round (graphScript.placed_c3) + "  Red";
-		}
-
-		if (graphScript.placed_c3 < 10) {
-			pink_text.text = "0" + Mathf.Round (graphScript.placed_c4) + "  Pink";
-		} else {
-			pink_text.text = Mathf.Round (graphScript.placed_c4) + "  Pink";
-		}*/
 
 		if (graphScript.placed_c1 < 10) {
 			navy_text.text = "0" + Mathf.Round (binStats.tpC1) + "  Navy Blue";

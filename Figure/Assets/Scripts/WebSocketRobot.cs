@@ -12,6 +12,7 @@ public class WebSocketRobot : MonoBehaviour {
 	public GameObject tool;
 	public GameObject robot;
 	public Vector3 tile_picked_position;
+	public float delay;
 
 	private Keyframe[] tX;
 	private Keyframe[] tY;
@@ -62,7 +63,7 @@ public class WebSocketRobot : MonoBehaviour {
 	IEnumerator Start () {
 
 		// Connect to Ros (websocket) server
-		WebSocket w = new WebSocket(new Uri("ws://10.1.10.10:9012/"));
+		WebSocket w = new WebSocket(new Uri("ws://10.1.10.14:9012/"));
 		yield return StartCoroutine(w.Connect());
 
 		// Listen for ROS data on websocket
@@ -119,6 +120,7 @@ public class WebSocketRobot : MonoBehaviour {
 					A6 = new Keyframe[trajectory.points.Count];
 
 					if (trajectory.table_t_robot.position.x.ToString () != "") {
+
 						robot_position = new Vector3 (trajectory.table_t_robot.position.x, trajectory.table_t_robot.position.y, trajectory.table_t_robot.position.z); 
 						robot.transform.localPosition = robot_position;
 						eulerConversion = new Vector3 (0, 0, 90f);
@@ -143,7 +145,7 @@ public class WebSocketRobot : MonoBehaviour {
 						float degA3 = -trajectory.points [i].positions [2] * Mathf.Rad2Deg;
 						float degA4 = -trajectory.points [i].positions [3] * Mathf.Rad2Deg;
 						float degA5 = -trajectory.points [i].positions [4] * Mathf.Rad2Deg;
-						float degA6 = trajectory.points [i].positions [5] * Mathf.Rad2Deg;
+						float degA6 = -trajectory.points [i].positions [5] * Mathf.Rad2Deg;
 
 						A1 [i] = new Keyframe (time, degA1);
 						A2 [i] = new Keyframe (time, degA2);
@@ -224,7 +226,7 @@ public class WebSocketRobot : MonoBehaviour {
 
 					anim.AddClip (clip, "trajectory");
 					anim.playAutomatically = false;
-					anim.Play ("trajectory");
+					//anim.Play ("trajectory");
 
 					AnimationClip robot_clip_A1 = anim_A1.GetClip ("robot1");
 					if (robot_clip_A1 != null) {
@@ -233,7 +235,7 @@ public class WebSocketRobot : MonoBehaviour {
 
 					anim_A1.AddClip (clip_A1, "robot1");
 					anim_A1.playAutomatically = false;
-					anim_A1.Play ("robot1");
+					//anim_A1.Play ("robot1");
 
 					AnimationClip robot_clip_A2 = anim_A2.GetClip ("robot2");
 					if (robot_clip_A2 != null) {
@@ -242,7 +244,7 @@ public class WebSocketRobot : MonoBehaviour {
 
 					anim_A2.AddClip (clip_A2, "robot2");
 					anim_A2.playAutomatically = false;
-					anim_A2.Play ("robot2");
+					//anim_A2.Play ("robot2");
 
 					AnimationClip robot_clip_A3 = anim_A3.GetClip ("robot3");
 					if (robot_clip_A3 != null) {
@@ -251,7 +253,7 @@ public class WebSocketRobot : MonoBehaviour {
 
 					anim_A3.AddClip (clip_A3, "robot3");
 					anim_A3.playAutomatically = false;
-					anim_A3.Play ("robot3");
+					//anim_A3.Play ("robot3");
 
 					AnimationClip robot_clip_A4 = anim_A4.GetClip ("robot4");
 					if (robot_clip_A4 != null) {
@@ -260,7 +262,7 @@ public class WebSocketRobot : MonoBehaviour {
 
 					anim_A4.AddClip (clip_A4, "robot4");
 					anim_A4.playAutomatically = false;
-					anim_A4.Play ("robot4");
+					//anim_A4.Play ("robot4");
 
 					AnimationClip robot_clip_A5 = anim_A5.GetClip ("robot5");
 					if (robot_clip_A5 != null) {
@@ -269,7 +271,7 @@ public class WebSocketRobot : MonoBehaviour {
 
 					anim_A5.AddClip (clip_A5, "robot5");
 					anim_A5.playAutomatically = false;
-					anim_A5.Play ("robot5");
+					//anim_A5.Play ("robot5");
 
 					AnimationClip robot_clip_A6 = anim_A6.GetClip ("robot6");
 					if (robot_clip_A6 != null) {
@@ -278,30 +280,38 @@ public class WebSocketRobot : MonoBehaviour {
 
 					anim_A6.AddClip (clip_A6, "robot6");
 					anim_A6.playAutomatically = false;
-					anim_A6.Play ("robot6");
+					//anim_A6.Play ("robot6");
+					StartCoroutine (PlayAnim(anim, anim_A1, anim_A2, anim_A3, anim_A4, anim_A5, anim_A6, delay));
+
 
 					/// parent tile that is going to be picked with robot tool
 
 					GameObject tile_picked = GameObject.FindGameObjectWithTag ("confidence_asset_picked");
-					Vector3 tile_picked_position = new Vector3 (tile_picked.transform.position.x, tile_picked.transform.position.y, tile_picked.transform.position.z); 
+					if (tile_picked != null) {
+						Vector3 tile_picked_position = new Vector3 (tile_picked.transform.position.x, tile_picked.transform.position.y, tile_picked.transform.position.z); 
+					}
+					GameObject tile_clone = GameObject.FindGameObjectWithTag ("confidence_asset_picked_clone");
+					if (tile_clone == null) {
+						if (trajectory.object_attached == true) {
+							if (tile_picked != null) {
+								GameObject tile_picked_moving = GameObject.Instantiate (tile_picked);
+								if (tile_picked_moving != null) {
+									tile_picked_moving.tag = "confidence_asset_picked_clone";
+									Vector3 tool_position = tool.transform.position;
+									tile_picked_moving.transform.position = tool_position;
+									tile_picked_moving.transform.SetParent (tool.transform);
+								}
+							}
 
-					if (trajectory.object_attached == true) {
-						if (tile_picked != null) {
-							GameObject tile_picked_moving = GameObject.Instantiate (tile_picked);
-							if (tile_picked_moving != null) {
-								tile_picked_moving.tag = "confidence_asset_picked_clone";
-								Vector3 tool_position = tool.transform.position;
-								tile_picked_moving.transform.position = tool_position;
-								tile_picked_moving.transform.SetParent (tool.transform);
+							// hide picked tile, in this case move out of sight
+							if (tile_picked != null) {
+								Vector3 bury_picked = new Vector3 (tile_picked.transform.position.x, tile_picked.transform.position.y - 100f, tile_picked.transform.position.z);
+								tile_picked.transform.position = bury_picked;
+								tile_picked_position = bury_picked;
 							}
 						}
-
-						// hide picked tile, in this case move out of sight
-
-						Vector3 bury_picked = new Vector3 (tile_picked.transform.position.x, tile_picked.transform.position.y - 100f, tile_picked.transform.position.z);
-						tile_picked.transform.position = bury_picked;
-						tile_picked_position = bury_picked;
-					} else {
+					}
+					if (trajectory.object_attached == false) {
 						var assets_picked_clone = GameObject.FindGameObjectsWithTag("confidence_asset_picked_clone");
 						foreach(GameObject item_picked in assets_picked_clone)
 						{
@@ -321,6 +331,23 @@ public class WebSocketRobot : MonoBehaviour {
 			yield return 0;
 		}
 		w.Close();
+	}
+
+	IEnumerator PlayAnim(Animation trajectory, Animation a1, Animation a2, Animation a3, Animation a4, Animation a5, Animation a6, float time)
+	{
+		float rangetime = GameObject.Find ("Slider").GetComponent <Slider>().value;
+		//float rangetime = (sliderValue * .1f) * 5;
+		//float rangetime = 0.15f;
+
+		yield return new WaitForSeconds(rangetime);
+		trajectory.Play ("trajectory");
+		a1.Play ("robot1");
+		a2.Play ("robot2");
+		a3.Play ("robot3");
+		a4.Play ("robot4");
+		a5.Play ("robot5");
+		a6.Play ("robot6");
+		yield break;
 	}
 
 }

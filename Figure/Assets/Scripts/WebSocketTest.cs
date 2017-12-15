@@ -14,6 +14,9 @@ public class WebSocketTest : MonoBehaviour {
 	public float tpC3;
 	public float tpC4;
 
+	public float lowestPercentage;
+	public float highestPercentage;
+
 	public int bin_destination;
 	private int bin;
 
@@ -22,7 +25,7 @@ public class WebSocketTest : MonoBehaviour {
 	IEnumerator Start () {
 
 		// Connect to Ros (websocket) server
-		WebSocket w = new WebSocket(new Uri("ws://10.1.10.10:9011/"));
+		WebSocket w = new WebSocket(new Uri("ws://10.1.10.14:9011/"));
 		yield return StartCoroutine(w.Connect());
 
 
@@ -85,8 +88,8 @@ public class WebSocketTest : MonoBehaviour {
 					}
 
 					percentageList.Sort ();
-					float lowestPercentage = percentageList [0];
-					float highestPercentage = percentageList [percentageList.Count - 1];
+					lowestPercentage = percentageList [0];
+					highestPercentage = percentageList [percentageList.Count - 1];
 
 					List<GameObject> annoList = new List<GameObject> ();
 					int rightmost_index = 0;
@@ -106,6 +109,7 @@ public class WebSocketTest : MonoBehaviour {
 						annoList.Add (goAnno);
 
 						ConfidenceAttributes goConfidence = goAnno.GetComponent<ConfidenceAttributes> ();
+
 						goConfidence.c1 = tiles.tiles [j].c1;
 						goConfidence.c2 = tiles.tiles [j].c2;
 						goConfidence.c3 = tiles.tiles [j].c3;
@@ -143,12 +147,18 @@ public class WebSocketTest : MonoBehaviour {
 							bin = 5;
 						}
 
+						if (j == 0) {
+							bin_destination = bin;
+							Debug.Log("bin destination web sock: " + bin_destination);
+						}
 
 						// find out which tile is going to be placed next and which bin it is going to be placed in
 						if (confidence_location.transform.localPosition.x < rightmost_xposition) {
 							rightmost_index = j;
 							rightmost_xposition = confidence_location.transform.localPosition.x;
 							bin_destination = bin;
+							Debug.Log("bin destination web sock: " + bin_destination);
+
 						}
 					}
 
@@ -156,7 +166,7 @@ public class WebSocketTest : MonoBehaviour {
 
 
 					/// send counts to graph
-					GameObject graphGO = GameObject.Find ("graph");
+					GameObject graphGO = GameObject.Find ("graph_vertical");
 					ScaleGraph scaleGraph = graphGO.GetComponent<ScaleGraph> ();
 					scaleGraph.count_c1 = c1_count;
 					scaleGraph.count_c2 = c2_count;

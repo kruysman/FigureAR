@@ -74,7 +74,9 @@ public class ConfidenceAttributes : MonoBehaviour {
 
 			if (confidenceList [i] == c1) {
 				// navy blue
-				Color color = new Color (25f/255f, 25f/255f, 112f/255f, circleAlpha/255f);
+				Color color = new Color (38f/255f, 122f/255f, 191f/255f, circleAlpha/255f);
+				//Color color = new Color (25f/255f, 25f/255f, 112f/255f, 255f/255f);
+
 				GradientColorKey key = new GradientColorKey (color, count);
 				keyList.Add (key);
 				if (i == 4) {
@@ -83,7 +85,9 @@ public class ConfidenceAttributes : MonoBehaviour {
 				}
 			} else if(confidenceList [i] == c2) {
 				// light blue
-				Color color = new Color (173f/255f, 216f/255f, 230f/255f, circleAlpha/255f);
+				Color color = new Color (109f/255f, 194f/255f, 252f/255f, circleAlpha/255f);
+				//Color color = new Color (173f/255f, 216f/255f, 230f/255f, 255f/255f);
+
 				GradientColorKey key = new GradientColorKey (color, count);
 				keyList.Add (key);
 				if (i == 4) {
@@ -92,7 +96,9 @@ public class ConfidenceAttributes : MonoBehaviour {
 				}
 			} else if(confidenceList [i] == c3) {
 				// red
-				Color color = new Color (220f/255f, 20f/255f, 60f/255f, circleAlpha/255f);
+				Color color = new Color (255f/255f, 62f/255f, 62f/255f, circleAlpha/255f);
+				//Color color = new Color (220f/255f, 20f/255f, 60f/255f, 255f/255f);
+
 				GradientColorKey key = new GradientColorKey (color, count);
 				keyList.Add (key);
 				if (i == 4) {
@@ -101,7 +107,9 @@ public class ConfidenceAttributes : MonoBehaviour {
 				}
 			} else if(confidenceList [i] == c4) {
 				// pink
-				Color color = new Color (250f/255f, 128f/255f, 114f/255f, circleAlpha/255f);
+				Color color = new Color (237f/255f, 110f/255f, 110f/255f, circleAlpha/255f);
+				//Color color = new Color (250f/255f, 128f/255f, 114f/255f, 255f/255f);
+
 				GradientColorKey key = new GradientColorKey (color, count);
 				keyList.Add (key);
 				if (i == 4) {
@@ -111,6 +119,8 @@ public class ConfidenceAttributes : MonoBehaviour {
 			} else if(confidenceList [i] == c5) {
 				// upside down
 				Color color = new Color (178f/255f, 131f/255f, 96f/255f, circleAlpha/255f);
+				//Color color = new Color (178f/255f, 131f/255f, 96f/255f, 255f/255f);
+
 				GradientColorKey key = new GradientColorKey (color, count);
 				keyList.Add (key);
 				if (i == 4) {

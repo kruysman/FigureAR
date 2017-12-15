@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class ScaleGraph : MonoBehaviour {
 	public float count_c1;
@@ -37,7 +38,7 @@ public class ScaleGraph : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		float max_tiles = 10f;
+		float max_tiles = 5f;
 
 		GameObject c1 = this.transform.GetChild (0).gameObject;
 		GameObject c2 = this.transform.GetChild (1).gameObject;
@@ -52,11 +53,18 @@ public class ScaleGraph : MonoBehaviour {
 		Vector3 temp5 = new Vector3 (1, count_c5 / max_tiles, 1); 
 
 
-		c1.transform.localScale = temp1;
-		c2.transform.localScale = temp2;
-		c3.transform.localScale = temp3;
-		c4.transform.localScale = temp4;
-		c5.transform.localScale = temp5;
+		//c1.transform.localScale = temp1;
+		//c2.transform.localScale = temp2;
+		//c3.transform.localScale = temp3;
+		//c4.transform.localScale = temp4;
+		//c5.transform.localScale = temp5;
+
+		float duration = 0.75f;
+		c1.transform.DOScale (temp1, duration); 
+		c2.transform.DOScale (temp2, duration); 
+		c3.transform.DOScale (temp3, duration); 
+		c4.transform.DOScale (temp4, duration); 
+		c5.transform.DOScale (temp5, duration); 
 
 
 		if (last_c1 != count_c1)
